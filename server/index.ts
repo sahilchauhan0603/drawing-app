@@ -31,28 +31,33 @@ app.get("/", (req: Request, res: Response) => {
 type DrawLine = {
   currentPoint : {x : number , y : number},
   prevPoint : {x : number , y : number} | null,
-  color : string
+  color : string,
+  room : string
 }
 
 io.on('connection' , (socket: Socket) => {
-  socket.on('draw line' , ({currentPoint , prevPoint , color} : DrawLine) => {
+  socket.on('join-room', (room) => {
+    socket.join(room)
+    console.log(`join to the room ${room}`)
+  })
+  socket.on('draw line' , ({currentPoint , prevPoint , color , room} : DrawLine) => {
 
-    socket.broadcast.emit('draw line' , {currentPoint , prevPoint , color} );
-    console.log("ref send fromm server")
+    socket.to(room).emit('draw line' , {currentPoint , prevPoint , color} );
+    console.log("ref send fromm server room")
   })
 
-  socket.on('client-ready' ,() => {
-    socket.broadcast.emit('get-canvas-state')
-    console.log('asking state from the cient')
+  socket.on('client-ready' ,(room : string) => {
+    socket.to(room).emit('get-canvas-state')
+    // console.log('asking state from the cient')
   })
 
-  socket.on('canvas-state' , (data) => {
-    socket.broadcast.emit('canvas-state-from-server' , data)
+  socket.on('canvas-state' , ({room , state} : {room : string , state : string}) => {
+    socket.to(room).emit('canvas-state-from-server' , state)
   })
 
-  socket.on('clear-all' , () => {
-    io.emit('clear-all-from-server')
-    console.log('clear from server')
+  socket.on('clear-all' , (room) => {
+    io.to(room).emit('clear-all-from-server')
+    // console.log('clear from server')
   })
 })
 
