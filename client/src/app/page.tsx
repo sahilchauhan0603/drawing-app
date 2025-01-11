@@ -2,7 +2,7 @@
 import { useDraw } from "./hooks/useDraw";
 import { ChromePicker } from "react-color";
 import { useEffect, useState } from "react";
-import { drawLine } from "../../utils/drawLine";
+import { drawLine } from "./utils/drawLine";
 import { io } from "socket.io-client";
 
 const socket = io('http://localhost:5000', {
