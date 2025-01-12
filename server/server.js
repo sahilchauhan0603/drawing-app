@@ -20,6 +20,7 @@ const io = new Server(server, {  // Initialize socket.io
 // Handle socket.io connections
 io.on('connection', (socket) => {
   console.log('user connected with ID:', socket.id);
+  console.log(socket.id)
 
   // Handle room joining
   socket.on('join-room', (room) => {
