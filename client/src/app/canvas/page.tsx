@@ -4,6 +4,8 @@ import { ChromePicker } from "react-color";
 import { useEffect, useState } from "react";
 import { drawLine } from "@/utils/drawLine";
 import socket from "@/services/socket";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Canvas() {
   const [color, setColor] = useState<string>('#FFFFFF');
@@ -15,16 +17,27 @@ export default function Canvas() {
       socket.emit('join-room', room);
       console.log(`Request to join room ${room}`);
       socket.emit('client-ready', room);
+
+      // Show success toast
+      toast.success(`successfully joined room - ${room}`, {
+        position: "top-right",
+      });
     }
   }
 
   function handleClear() {
     if (room.trim()) {
       socket.emit('clear-all', room);
-      console.log('Clear canvas reques st sent from client');
+      console.log('Clear canvas request sent from client');
+      toast.success("Canvas successfully cleared for room: " + room, {
+        position: "top-right",
+      });
     } else {
       clear(); // For single-user mode
       console.log('Clearing canvas locally (single-user mode)');
+      toast.success("Canvas successfully cleared", {
+        position: "top-right",
+      });
     }
   }
 
@@ -69,7 +82,7 @@ export default function Canvas() {
   }
 
   return (
-    <div className="w-screen h-screen flex bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
+    <div className="w-100 h-screen flex bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
       
       {/* Left Panel */}
       <div className="flex flex-col justify-center items-start w-1/3 p-6 space-y-4 text-white">
@@ -105,13 +118,16 @@ export default function Canvas() {
       {/* Right Panel */}
       <div className="flex justify-center items-center w-2/3">
         <canvas
-          width={900}
+          width={800}
           height={550}
           ref={canvasRef}
           onMouseDown={onMouseDown}
           className="border border-white rounded-md shadow-lg bg-gray-100"
         />
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer />
     </div>
   );
 }
