@@ -1,6 +1,6 @@
 export default function Navbar() {
   return (
-    <header className="bg-gray-100 text-gray-800 w-full shadow-md">
+    <header className="bg-gray-200 text-gray-800 w-full shadow-md">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center h-14 px-4">
         {/* Logo */}
         <a href="#" className="flex items-center">
@@ -16,7 +16,7 @@ export default function Navbar() {
         </a>
 
         {/* Links */}
-        <ul className="hidden lg:flex space-x-6">
+        <ul className="hidden lg:flex space-x-6 ml-20">
           {["Home", "About", "Services", "Contact"].map((link, index) => (
             <li key={index}>
               <a
