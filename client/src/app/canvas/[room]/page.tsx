@@ -4,13 +4,36 @@ import { ChromePicker } from "react-color";
 import { useEffect, useState } from "react";
 import { drawLine } from "@/utils/drawLine";
 import socket from "@/services/socket";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { toast, ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
-export default function Canvas() {
+export default function Canvas({params} : PostPageProps) {
   const [color, setColor] = useState<string>('#FFFFFF');
   const { canvasRef, onMouseDown, clear } = useDraw(createLine);
+ 
   const [room, setRoom] = useState<string>('');
+
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await (params instanceof Promise ? params : Promise.resolve(params));
+      console.log("Resolved Params:", resolvedParams);
+      const currRoom = resolvedParams?.room;
+      if (currRoom) {
+        setRoom(currRoom);
+        console.log("Current Room:", currRoom);
+      } else {
+        console.warn("No room found in resolved params.");
+      }
+    };
+
+    resolveParams();
+  }, [params]);
+  // Step 2: Handle joining the room once the room state is set
+  useEffect(() => {
+    if (room.trim()) {
+      handleJoinRoom();  // Join room when room is available
+    }
+  }, [room]);  
 
   function handleJoinRoom() {
     if (room.trim()) {
@@ -19,29 +42,34 @@ export default function Canvas() {
       socket.emit('client-ready', room);
 
       // Show success toast
-      toast.success(`successfully joined room - ${room}`, {
-        position: "top-right",
-      });
+      // toast.success(`successfully joined room - ${room}`, {
+      //   position: "top-right",
+      // });
     }
   }
 
+   
   function handleClear() {
+    
     if (room.trim()) {
       socket.emit('clear-all', room);
       console.log('Clear canvas request sent from client');
-      toast.success("Canvas successfully cleared for room: " + room, {
-        position: "top-right",
-      });
+      // toast.success("Canvas successfully cleared for room: " + room, {
+      //   position: "top-right",
+      // });
     } else {
       clear(); // For single-user mode
       console.log('Clearing canvas locally (single-user mode)');
-      toast.success("Canvas successfully cleared", {
-        position: "top-right",
-      });
+      // toast.success("Canvas successfully cleared", {
+      //   position: "top-right",
+      // });
     }
   }
 
   useEffect(() => {
+    
+     
+  
     const ctx = canvasRef.current?.getContext('2d');
 
     socket.on('get-canvas-state', () => {
@@ -74,7 +102,7 @@ export default function Canvas() {
       socket.off('canvas-state-from-server');
       socket.off('clear-all-from-server'); // Clean up the listener
     };
-  }, [canvasRef, room]);
+  }, [canvasRef, room , params]);
 
   function createLine({ ctx, currentPoint, prevPoint }: Draw) {
     drawLine({ ctx, currentPoint, prevPoint, color });
@@ -98,21 +126,6 @@ export default function Canvas() {
           Clear Canvas
         </button>
         
-        <div className="flex items-center">
-          <input
-            type="text"
-            placeholder="Enter room name"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            className="p-2 border text-black border-gray-300 rounded w-full focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleJoinRoom}
-            className="bg-blue-600 hover:bg-blue-700 text-white ml-2 px-4 py-2 rounded shadow-lg transform transition-transform duration-200 hover:scale-105"
-          >
-            Join Room
-          </button>
-        </div>
       </div>
 
       {/* Right Panel */}
@@ -127,7 +140,7 @@ export default function Canvas() {
       </div>
 
       {/* Toast Container */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 }

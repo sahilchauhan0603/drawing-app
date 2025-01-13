@@ -16,3 +16,9 @@ type DrawLineProp = {
   currentPoint: Point
   color: string
 }
+
+interface PostPageProps {
+  params: {
+    currRoom?: string;
+  };
+}
