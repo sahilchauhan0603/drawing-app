@@ -4,8 +4,8 @@ import { ChromePicker } from "react-color";
 import { useEffect, useState } from "react";
 import { drawLine } from "@/utils/drawLine";
 import socket from "@/services/socket";
-// import { toast, ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Canvas({params} : PostPageProps) {
   const [color, setColor] = useState<string>('#FFFFFF');
@@ -42,9 +42,9 @@ export default function Canvas({params} : PostPageProps) {
       socket.emit('client-ready', room);
 
       // Show success toast
-      // toast.success(`successfully joined room - ${room}`, {
-      //   position: "top-right",
-      // });
+      toast.success(`successfully joined room - ${room}`, {
+        position: "top-right",
+      });
     }
   }
 
@@ -54,22 +54,20 @@ export default function Canvas({params} : PostPageProps) {
     if (room.trim()) {
       socket.emit('clear-all', room);
       console.log('Clear canvas request sent from client');
-      // toast.success("Canvas successfully cleared for room: " + room, {
-      //   position: "top-right",
-      // });
+      toast.success("Canvas successfully cleared for room: " + room, {
+        position: "top-right",
+      });
     } else {
       clear(); // For single-user mode
       console.log('Clearing canvas locally (single-user mode)');
-      // toast.success("Canvas successfully cleared", {
-      //   position: "top-right",
-      // });
+      toast.success("Canvas successfully cleared", {
+        position: "top-right",
+      });
     }
   }
 
   useEffect(() => {
     
-     
-  
     const ctx = canvasRef.current?.getContext('2d');
 
     socket.on('get-canvas-state', () => {
@@ -140,7 +138,7 @@ export default function Canvas({params} : PostPageProps) {
       </div>
 
       {/* Toast Container */}
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </div>
   );
 }
