@@ -25,13 +25,34 @@ export default function HomePage() {
 
       {/* Content */}
       <div className="relative z-10 text-center text-white">
+        
         {/* Hero Section */}
         <section>
           <h1 className="max-w-xl mx-auto text-6xl font-bold">
             Beautiful Doodles to Tell Your Story
           </h1>
-          <p className="text-2xl mt-4">Doodle together with your friends</p>
+          <p className="text-2xl mt-8 text-black font-bold">Want to Doodle together with your friends?</p>
+          <p className="text-2xl mt-4 text-black font-extrabold">Join the room and start creating together...</p>
+          
+          {/* Downward Arrow */}
+          <div className="mt-8">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-10 h-10 mx-auto text-white animate-bounce"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 15l7 7 7-7"
+              />
+            </svg>
+          </div>
         </section>
+
 
         {/* Button Section */}
         <section className="flex justify-center mt-8 space-x-4">
@@ -75,3 +96,10 @@ export default function HomePage() {
     </div>
   );
 }
+
+{/* <button className="px-6 py-3 bg-blue-600 text-white rounded-xl transition-all hover:bg-blue-500 hover:scale-105 focus:outline-none">
+            <LoginLink>Log In</LoginLink>
+    </button> */}
+{/* <button className="px-6 py-3 bg-blue-600 text-white rounded-xl transition-all hover:bg-blue-500 hover:scale-105 focus:outline-none">
+            <RegisterLink>Sign Up</RegisterLink>
+    </button> */}
