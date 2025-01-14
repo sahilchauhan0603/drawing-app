@@ -6,26 +6,14 @@ import { drawLine } from "@/utils/drawLine";
 import socket from "@/services/socket";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/navigation";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useRouter } from "next/navigation";  // Import the router
 
 export default function Canvas({params} : PostPageProps) {
- 
   const [color, setColor] = useState<string>('#FFFFFF');
   const { canvasRef, onMouseDown, clear } = useDraw(createLine);
   const [room, setRoom] = useState<string>('');
 
-  const { isAuthenticated, isLoading } = useKindeBrowserClient();
-  const router = useRouter();
-
-  // Show a loading state while checking authentication
-  if (isLoading) return <div>Loading...</div>;
-
-  // Redirect user if not authenticated
-  if (!isAuthenticated) {
-    router.push("/login"); // Redirect to the login page
-    return null; // Prevent rendering of protected content
-  }
+  const router = useRouter(); // Initialize the router
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -42,6 +30,7 @@ export default function Canvas({params} : PostPageProps) {
 
     resolveParams();
   }, [params]);
+
   // Step 2: Handle joining the room once the room state is set
   useEffect(() => {
     if (room.trim()) {
@@ -62,7 +51,6 @@ export default function Canvas({params} : PostPageProps) {
     }
   }
 
-   
   function handleClear() {
     if (room.trim()) {
       socket.emit('clear-all', room);
@@ -79,8 +67,11 @@ export default function Canvas({params} : PostPageProps) {
     }
   }
 
+  function handleExit() {
+    router.push('/'); // Navigate to the home page
+  }
+
   useEffect(() => {
-    
     const ctx = canvasRef.current?.getContext('2d');
 
     socket.on('get-canvas-state', () => {
@@ -125,7 +116,6 @@ export default function Canvas({params} : PostPageProps) {
       
       {/* Left Panel */}
       <div className="flex flex-col justify-center items-start w-1/3 p-6 space-y-4 text-white">
-        
         <h1 className="text-2xl font-bold mb-4">Collaborative Drawing Board</h1>
         <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
         
@@ -135,6 +125,15 @@ export default function Canvas({params} : PostPageProps) {
           className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow-lg transform transition-transform duration-200 hover:scale-105"
         >
           Clear Canvas
+        </button>
+        
+        {/* Exit Button */}
+        <button
+          onClick={handleExit}
+          type="button"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow-lg transform transition-transform duration-200 hover:scale-105"
+        >
+          Exit
         </button>
         
       </div>

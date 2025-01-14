@@ -9,18 +9,16 @@ export default function Navbar({ isAuthenticated }: { isAuthenticated: boolean }
   return (
     <header className="bg-gray-800 text-white w-full shadow-lg">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center h-16 px-6 sm:px-8">
+        
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 32 32"
-            className="w-8 h-8 text-blue-500 hover:scale-110 transition-transform duration-200 ease-in-out"
-          >
-            <path d="..."></path>
-          </svg>
-          <span className="ml-3 font-semibold text-xl">Logo</span>
+          <img
+            src="/art.jpg"  // Replace with the actual path to your image in the public folder
+            alt="Logo"
+            className="w-12 h-12 object-contain hover:scale-110 transition-transform duration-200 ease-in-out"
+          />
         </Link>
+
 
         {/* Links */}
         <ul className="hidden lg:flex space-x-8 ml-24">
