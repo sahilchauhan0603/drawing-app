@@ -1,11 +1,16 @@
-import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+"use client";
 
-export default function Navbar() {
+import Link from "next/link";
+import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+
+// console.log(isUserAuthenticated);
+
+export default function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   return (
     <header className="bg-gray-800 text-white w-full shadow-lg">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center h-16 px-6 sm:px-8">
         {/* Logo */}
-        <a href="#" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -15,33 +20,39 @@ export default function Navbar() {
             <path d="..."></path>
           </svg>
           <span className="ml-3 font-semibold text-xl">Logo</span>
-        </a>
+        </Link>
 
         {/* Links */}
         <ul className="hidden lg:flex space-x-8 ml-24">
-          {["Home", "About", "Services", "Contact"].map((link, index) => (
+          {[
+            { name: "Home", path: "/" },
+            { name: "About", path: "/aboutUs" },
+            { name: "Contact", path: "/contactUs" },
+            { name: "Start Drawing", path: "/canvas", title: "Want to draw alone? Don't worry, we have personalized canvas for you." },
+          ].map((link, index) => (
             <li key={index}>
-              <a
-                href="#"
+              <Link
+                href={link.path}
                 className="text-sm text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                title={link.title} // Set the title attribute
               >
-                {link}
-              </a>
+                {link.name}
+              </Link>
             </li>
           ))}
         </ul>
 
-        {/* Actions */}
+        {/* Auth Button */}
         <div className="hidden lg:flex items-center space-x-6">
-          <button className="px-6 py-3 text-gray-200 border border-gray-600 rounded-xl transition-all hover:bg-gray-600 hover:border-gray-500 hover:text-white focus:outline-none transform hover:scale-105">
-            <LoginLink>Log In</LoginLink>
-          </button>
-          {/* <button className="px-6 py-3 bg-blue-600 text-white rounded-xl transition-all hover:bg-blue-500 hover:scale-105 focus:outline-none">
-            <LoginLink>Log In</LoginLink>
-          </button> */}
-          {/* <button className="px-6 py-3 bg-blue-600 text-white rounded-xl transition-all hover:bg-blue-500 hover:scale-105 focus:outline-none">
-            <RegisterLink>Sign Up</RegisterLink>
-          </button> */}
+          {isAuthenticated ? (
+            <button className="px-6 py-3 text-gray-200 border border-gray-600 rounded-xl transition-all hover:bg-gray-600 hover:border-gray-500 hover:text-white focus:outline-none transform hover:scale-105">
+              <LogoutLink>Log Out</LogoutLink>
+            </button>
+          ) : (
+            <button className="px-6 py-3 text-gray-200 border border-gray-600 rounded-xl transition-all hover:bg-gray-600 hover:border-gray-500 hover:text-white focus:outline-none transform hover:scale-105">
+              <LoginLink>Log In</LoginLink>
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu */}
