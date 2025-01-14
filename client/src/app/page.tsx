@@ -1,5 +1,6 @@
 "use client"
 import HomePage from "../components/homepage";
+import Footer from "../components/footer";
 import { useEffect } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
@@ -13,6 +14,7 @@ export default function Page() {
   return (
     <div>
       <HomePage/>
+      <Footer/>
     </div>
   );
 }
