@@ -3,6 +3,7 @@
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 // import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/navbar";
 
 export default function ContactUs() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
@@ -18,6 +19,8 @@ export default function ContactUs() {
   }
 
   return (
+    <>
+  <Navbar/>
     <div className="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen py-16 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold text-blue-800 mb-8 text-center animate-fadeIn">
@@ -79,5 +82,7 @@ export default function ContactUs() {
         </form>
       </div>
     </div>
+  <Navbar/>
+  </>
   );
 }

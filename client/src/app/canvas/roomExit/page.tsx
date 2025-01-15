@@ -105,6 +105,7 @@ export default function RoomExitPage() {
             <FaHome className="mr-2" />
             Go to Home
           </button>
+          
         </div>
       </div>
 
