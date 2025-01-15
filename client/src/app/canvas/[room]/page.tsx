@@ -68,7 +68,11 @@ export default function Canvas({params} : PostPageProps) {
   }
 
   function handleExit() {
-    router.push('/'); // Navigate to the home page
+    if (room) {
+      router.push(`/canvas/roomExit?room=${room}`);
+    } else {
+      router.push('/canvas/roomExit');
+    }
   }
 
   useEffect(() => {
