@@ -22,3 +22,25 @@ interface PostPageProps {
     currRoom?: string;
   };
 }
+
+type DrawRectangleProps = {
+  ctx :CanvasRenderingContext2D,
+  startPoint : Point,
+  endPoint : Point,
+  color : string 
+}
+
+interface DrawCircleProps {
+  ctx: CanvasRenderingContext2D;
+  centerPoint: Point;
+  endPoint: Point;
+  color: string;
+}
+
+type DrawShapeProps = {
+  ctx :CanvasRenderingContext2D,
+  startPoint : Point,
+  endPoint : Point,
+  shape : "rectangle" | "circle",
+  color : string
+}

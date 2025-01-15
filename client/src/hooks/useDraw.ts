@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-export const useDraw = (onDraw : ({ctx , currentPoint , prevPoint} : Draw) => void) => {
+export const useDraw = (onDraw : ({ctx , currentPoint , prevPoint} : Draw) => void,) => {
     const [mouseUp , setMouseUp] = useState(true);
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -25,7 +25,6 @@ export const useDraw = (onDraw : ({ctx , currentPoint , prevPoint} : Draw) => vo
     useEffect(() => {
 
         const handler = (e : MouseEvent) => {
-            // console.log({x : e.clientX , y : e.clientY})
             const currentPoint = findPoints(e);
             if(mouseUp) return
             const ctx = canvasRef.current?.getContext('2d')

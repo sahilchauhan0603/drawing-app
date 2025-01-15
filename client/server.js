@@ -15,7 +15,7 @@ app.prepare().then(() => {
 
   const io = new Server(server, {
     cors: {
-      origin: 'http://localhost:3000/', // Update with your frontend URL
+      origin: 'http://localhost:3000', // Ensure this is correct
       methods: ['GET', 'POST'],
     },
   });
@@ -23,41 +23,47 @@ app.prepare().then(() => {
   io.on('connection', (socket) => {
     console.log('User connected with ID:', socket.id);
 
-    // Handle joining rooms
+    // Join room
     socket.on('join-room', (room) => {
       socket.join(room);
       console.log(`User with (ID: ${socket.id}) joined room: ${room}`);
     });
 
-    // Handle drawing lines
+    // Draw line
     socket.on('draw line', ({ currentPoint, prevPoint, color, room }) => {
       socket.to(room).emit('draw line', { currentPoint, prevPoint, color });
-      console.log('Line drawn in room:', room);
     });
 
-    // Handle client ready state
+    // Draw circle
+    socket.on('draw circle', ({ startPoint, endPoint, color, room }) => {
+      socket.to(room).emit('draw circle', { startPoint, endPoint, color });
+    });
+
+    // Draw rectangle
+    socket.on('draw-rectangle', ({ startPoint, endPoint, color, room }) => {
+      socket.to(room).emit('draw-rectangle', { startPoint, endPoint, color });
+    });
+
+    // Client ready state
     socket.on('client-ready', (room) => {
-      if (room) { //change
+      if (room) {
         socket.to(room).emit('get-canvas-state');
         console.log('Requesting canvas state from client in room:', room);
       }
     });
 
-    // Handle canvas state updates
+    // Canvas state updates
     socket.on('canvas-state', ({ room, state }) => {
-      if (room) {
-        socket.to(room).emit('canvas-state-from-server', state);
-      }
+      socket.to(room).emit('canvas-state-from-server', state);
     });
 
-    // Handle canvas clear
+    // Clear canvas
     socket.on('clear-all', (room) => {
       if (!room) {
         console.error('Invalid room');
         return;
       }
       console.log(`Clear canvas request received for room: ${room}`);
-  
       io.in(room)
         .allSockets()
         .then((sockets) => {
@@ -65,7 +71,6 @@ app.prepare().then(() => {
             console.log(`No clients in room ${room} to clear canvas.`);
             return;
           }
-          console.log(`Clients in room ${room}:`, Array.from(sockets));
           io.to(room).emit('clear-all-from-server');
           console.log(`Clear canvas event emitted to room: ${room}`);
         })
