@@ -1,8 +1,8 @@
 'use client'; // Add this at the very top of the file
 import Canvas from "@/components/Canvas/canvasMultiUser";
-import HomeIcon from "@/components/Canvas/HomeIcon";
 import ProfileIcons from "@/components/Canvas/ProfileIcons";
 import ChatIcon from '@/components/Canvas/ChatIcon';
+import HelpIcon from '@/components/Canvas/HelpIcon';
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'; 
 
@@ -40,7 +40,7 @@ export default function Page({ params }: { params: Promise<Params> }) {
     <div>
       <ProfileIcons />
       <Canvas room={room}/>
-      <HomeIcon />
+      <HelpIcon/>
       <ChatIcon room={room} name={name} />
     </div>
   );

@@ -70,7 +70,7 @@ export default function Chat({ name , room }: ChatIconProps) {
             <div key={index} className={`mb-3 ${msg.sender === name ? 'text-right' : 'text-left'}`}>
               <span
                 className={`inline-block px-4 py-2 rounded-2xl shadow-md ${
-                  msg.sender === name ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+                  msg.sender === name ? 'bg-blue-500 text-gray-800' : 'bg-gray-200 text-gray-800'
                 }`}
               >
                 <strong>{msg.sender}:</strong> {msg.text} 

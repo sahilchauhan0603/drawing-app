@@ -1,8 +1,7 @@
 "use client"
 import Canvas from "@/components/Canvas/canvasSingleUser";
-import HomeIcon from "@/components/Canvas/HomeIcon";
 import ProfileIcons from "@/components/Canvas/ProfileIcons";
-import ChatIcon from './../../components/Canvas/ChatIcon';
+import HelpIcon from './../../components/Canvas/HelpIcon';
 
 export default function Page() {
 
@@ -10,7 +9,8 @@ export default function Page() {
     <div>
       <ProfileIcons/>
       <Canvas/>
-      <HomeIcon/>
+      {/* <HomeIcon/> */}
+      <HelpIcon/>
       {/* <ChatIcon /> */}
     </div>
   );
