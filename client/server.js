@@ -23,13 +23,16 @@ app.prepare().then(() => {
   io.on('connection', (socket) => {
     console.log('User connected with ID:', socket.id);
 
-    //Chat app
     console.log('A user connected:', socket.id);
-    // Listen for messages from clients
-    socket.on('sendMessage', (message) => {
-      // Broadcast the message to all connected clients
-      io.emit('receiveMessage', message);
+
+    socket.on('sendMessage', ({ room, sender, text }) => {
+      console.log(`Message received in room ${room}: ${text}`);
+
+      // Broadcast the message to others in the room
+      const message = { sender, text };
+      socket.to(room).emit('receiveMessage',message );
     });
+
     socket.on('disconnect', () => {
       console.log('A user disconnected:', socket.id);
     });

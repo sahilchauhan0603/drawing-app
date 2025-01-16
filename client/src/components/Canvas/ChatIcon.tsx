@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import Chat from './Chat'; // Ensure the Chat component is in the same directory
 import { FaComments } from 'react-icons/fa'; // Ensure react-icons is installed
 
-const ChatIcon = () => {
+interface ChatIconProps {
+  name: string; // Define the correct type for the 'name' prop
+}
+
+const ChatIcon = ({ name } : ChatIconProps) => {
   const [showChat, setShowChat] = useState(false);
 
   return (
@@ -16,7 +20,7 @@ const ChatIcon = () => {
       </div>
 
       {/* Chat Box */}
-      {showChat && <Chat />}
+      {showChat && <Chat name={name} />} {/* Corrected prop passing syntax */}
     </>
   );
 };

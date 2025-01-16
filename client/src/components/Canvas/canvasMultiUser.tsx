@@ -10,10 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation"; 
 import { FiX, FiMenu, } from "react-icons/fi";
 
-export default function Canvas({params} : PostPageProps) {
+export default function Canvas({room} : string) {
   const [color, setColor] = useState<string>('#FFFFFF');
   const { canvasRef, onMouseDown, clear } = useDraw(createLine);
-  const [room, setRoom] = useState<string>('');
+  // const [room, setRoom] = useState<string>('');
   const [selectedShape, setSelectedShape] = useState<"freehand" | "rectangle" | "circle" | "line">("freehand");
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar state
@@ -30,20 +30,6 @@ export default function Canvas({params} : PostPageProps) {
       socket.emit('draw circle', { startPoint, endPoint, color, room });
     }
   });
-
-  useEffect(() => {
-    const resolveParams = async () => {
-      const resolvedParams = await (params instanceof Promise ? params : Promise.resolve(params));
-      const currRoom = resolvedParams?.room;
-      if (currRoom) {
-        setRoom(currRoom);
-        console.log("Current Room:", currRoom);
-      } else {
-        console.warn("No room found in resolved params.");
-      }
-    };
-    resolveParams();
-  }, [params]);
 
   useEffect(() => {
     if (room.trim()) {
@@ -125,7 +111,7 @@ export default function Canvas({params} : PostPageProps) {
       socket.off('canvas-state-from-server');
       socket.off('draw-rectangle');
     };
-  }, [canvasRef, room , params , selectedShape , shapeCanvasRef]);
+  }, [canvasRef, room , selectedShape , shapeCanvasRef]);
 
   function createLine({ ctx, currentPoint, prevPoint }: Draw) {
     if(selectedShape == 'freehand'){
@@ -181,7 +167,7 @@ export default function Canvas({params} : PostPageProps) {
         <div className="mt-4 space-y-2">
           <h2 className="text-lg font-semibold">Select Shape</h2>
     
-            <div className="flex space-x-2"> {/* Use flex to arrange buttons side by side */}
+            <div className="flex space-x-2"> 
             {/* Freehand Button */}
             <div className="relative group">
               <button
