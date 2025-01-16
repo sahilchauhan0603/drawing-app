@@ -9,6 +9,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation"; 
 import { FiX, FiMenu, } from "react-icons/fi";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload, faCloudDownloadAlt, faPencilAlt, faTimes, faSquare, faCircle, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+
 
 export default function Canvas({params} : PostPageProps) {
   const [color, setColor] = useState<string>('#FFFFFF');
@@ -68,10 +73,6 @@ export default function Canvas({params} : PostPageProps) {
 
   function handleClear() {
     clear()
-  }
-
-  function handleExit() {
-    router.push('/'); // Navigate to the home page
   }
 
   useEffect(() => {
@@ -144,105 +145,116 @@ export default function Canvas({params} : PostPageProps) {
   return (
     <div className="w-100 flex bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
           
-      {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-screen z-20 bg-gray-900 text-white p-4 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+          <div
+  className={`fixed top-0 left-0 h-5/6 ml-1 rounded-lg overflow-y-auto w-64 z-20 bg-gray-900 text-white p-4 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+  style={{ top: '12.5%' }} // Optional, to center the sidebar vertically.
+>
+  <div className="flex justify-between items-center mb-6">
+    <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 hover:text-white">
+      <FontAwesomeIcon icon={faTimes} size="lg" />
+    </button>
+  </div>
+
+  <div className="flex flex-col h-full">
+    <div className="space-y-6">
+      {/* Color Picker */}
+      <button
+        onClick={() => setColorPickerOpen(!colorPickerOpen)}
+        className="w-full text-left py-2 px-4 bg-blue-600 rounded-lg hover:bg-blue-700 mb-4 transition-all"
       >
-        <div className="flex justify-between items-center mb-6">
-          {/* <h1 className="text-xl font-bold">Draw App</h1> */}
+        {colorPickerOpen ? "Close Color Picker" : "Choose Color"}
+      </button>
+      {colorPickerOpen && (
+        <div className="relative">
+          <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
+        </div>
+      )}
+
+      {/* Shape Selection */}
+      <div className="mt-0 space-y-2">
+        <h2 className="text-lg font-semibold">Select Shape</h2>
+        <div className="flex space-x-2">
           <button
-            onClick={() => setIsSidebarOpen(false)}
-            className="text-gray-400 hover:text-white"
+            onClick={() => handleShapeChange("freehand")}
+            className={`${
+              selectedShape === "freehand" ? "bg-blue-600" : "bg-gray-600"
+            } px-4 py-2 rounded shadow hover:bg-blue-700`}
           >
-            <FiX size={24} />
+            <FontAwesomeIcon icon={faPencilAlt} className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => handleShapeChange("rectangle")}
+            className={`${
+              selectedShape === "rectangle" ? "bg-blue-600" : "bg-gray-600"
+            } px-4 py-2 rounded shadow hover:bg-blue-700`}
+          >
+            <FontAwesomeIcon icon={faSquare} className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => handleShapeChange("circle")}
+            className={`${
+              selectedShape === "circle" ? "bg-blue-600" : "bg-gray-600"
+            } px-4 py-2 rounded shadow hover:bg-blue-700`}
+          >
+            <FontAwesomeIcon icon={faCircle} className="w-5 h-5" />
           </button>
         </div>
+      </div>
 
-        <button
-          onClick={() => setColorPickerOpen(!colorPickerOpen)}
-          className="w-full text-left py-2 px-4 bg-blue-600 rounded-lg hover:bg-blue-700 mb-4 transition-all"
-        >
-          {colorPickerOpen ? "Close Color Picker" : "Choose Color"}
+      {/* File Handling */}
+      <div className="mt-3 space-y-2">
+        <button className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700">
+          <FontAwesomeIcon icon={faFileUpload} />
+          <span>Upload File</span>
         </button>
-        {colorPickerOpen && (
-          <div className="relative">
-            <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
-          </div>
-        )}
-
-        
-        {/* Shape Selection */}
-        <div className="mt-4 space-y-2">
-          <h2 className="text-lg font-semibold">Select Shape</h2>
-          
-          <div className="flex space-x-2"> {/* Use flex to arrange buttons side by side */}
-            {/* Freehand Button */}
-            <div className="relative group">
-              <button
-                onClick={() => handleShapeChange("freehand")}
-                className={`${
-                  selectedShape === "freehand" ? "bg-blue-600" : "bg-gray-600"
-                } px-4 py-2 rounded shadow hover:bg-blue-700`}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-              </button>
-              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Freehand</span>
-            </div>
-        
-            {/* Rectangle Button */}
-            <div className="relative group">
-              <button
-                onClick={() => handleShapeChange("rectangle")}
-                className={`${
-                  selectedShape === "rectangle" ? "bg-blue-600" : "bg-gray-600"
-                } px-4 py-2 rounded shadow hover:bg-blue-700`}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="18" height="18" rx="2" fill="#fff" stroke="currentColor" stroke-width="2" />
-                </svg>
-              </button>
-              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Rectangle</span>
-            </div>
-        
-            {/* Circle Button */}
-            <div className="relative group">
-              <button
-                onClick={() => handleShapeChange("circle")}
-                className={`${
-                  selectedShape === "circle" ? "bg-blue-600" : "bg-gray-600"
-                } px-4 py-2 rounded shadow hover:bg-blue-700`}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="9" fill="#fff" stroke="currentColor" stroke-width="2" />
-                </svg>
-              </button>
-              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Circle</span>
-            </div>
-          </div>
-        </div>
-
+        <button className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700">
+          <FontAwesomeIcon icon={faCloudDownloadAlt} />
+          <span>Export</span>
+        </button>
+        <button className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700">
+          <FontAwesomeIcon icon={faSave} />
+          <span>Save</span>
+        </button>
         <button
           onClick={handleClear}
-          className="w-full py-2 px-4 bg-red-600 rounded-lg mt-2 hover:bg-red-700 transition-all"
+          className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700"
         >
-          Clear
+          <FontAwesomeIcon icon={faRotateRight} />
+          <span>Reset Canvas</span>
         </button>
-
-        {/* Exit Button */}
-         <button
-           onClick={handleExit}
-           type="button"
-           className="bg-blue-600 hover:bg-blue-700 text-white px-4 mt-2 py-2 rounded shadow-lg transform transition-transform duration-200 hover:scale-105"
-         >
-           Exit
-         </button>
-    
       </div>
-    
+
+      {/* Divider */}
+      <hr className="border-gray-700" />
+
+      {/* Social Media Links */}
+      <div className="space-y-2">
+        <a href="#" className="flex justify-center  text-gray-400 hover:text-white">
+          <span>Drawing App</span>
+        </a>
+        <a href="#" className="flex items-center space-x-2 text-gray-400 hover:text-white">
+          <FontAwesomeIcon icon={faFacebookF} />
+          <span>Facebook</span>
+        </a>
+        <a href="#" className="flex items-center space-x-2 text-gray-400 hover:text-white">
+          <FontAwesomeIcon icon={faTwitter} />
+          <span>Twitter</span>
+        </a>
+        <a href="#" className="flex items-center space-x-2 text-gray-400 hover:text-white">
+          <FontAwesomeIcon icon={faInstagram} />
+          <span>Instagram</span>
+        </a>
+        <a href="#" className="flex items-center space-x-2 text-gray-400 hover:text-white">
+          <FontAwesomeIcon icon={faLinkedinIn} />
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
       {/* Sidebar Toggle */}
       {!isSidebarOpen && (
         <button

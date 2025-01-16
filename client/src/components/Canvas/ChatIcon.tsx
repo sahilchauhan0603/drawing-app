@@ -10,7 +10,7 @@ const ChatIcon = ({ room , name } : ChatIconProps) => {
     <>
       <div
         onClick={() => setShowChat(!showChat)}
-        className="fixed bottom-20 right-5 bg-blue-500 rounded-full w-12 h-12 flex items-center justify-center shadow-lg cursor-pointer hover:bg-blue-600 transition duration-200"
+        className="fixed bottom-60 right-1 bg-blue-500 rounded-full w-12 h-12 flex items-center justify-center shadow-lg cursor-pointer hover:bg-blue-600 transition duration-200"
       >
         <FaComments className ="text-white text-2xl" />
       </div>
