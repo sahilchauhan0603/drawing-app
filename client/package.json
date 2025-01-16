@@ -13,6 +13,7 @@
     "@emailjs/browser": "^4.4.1",
     "@kinde-oss/kinde-auth-nextjs": "^2.4.6",
     "emailjs-com": "^3.2.0",
+    "firebase": "^11.1.0",
     "framer-motion": "^11.18.0",
     "mongoose": "^8.9.4",
     "next": "15.1.3",
