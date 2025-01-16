@@ -53,7 +53,7 @@ export default function FeatureSectionPage() {
             {/* Feature 2 */}
             <div className="bg-gray-200 p-3 rounded-lg shadow-lg hover:scale-105 transform transition-all">
               <img
-                src="/feature2.jpg"
+                src="/art.jpg"
                 alt="Canvas"
                 className="w-full h-40 object-cover rounded-lg mb-4"
               />
@@ -66,7 +66,7 @@ export default function FeatureSectionPage() {
             {/* Feature 3 */}
             <div className="bg-gray-200 p-3 rounded-lg shadow-lg hover:scale-105 transform transition-all">
               <img
-                src="/feature3.jpg"
+                src="/sm.jpeg"
                 alt="Sharing"
                 className="w-full h-40 object-cover rounded-lg mb-4"
               />

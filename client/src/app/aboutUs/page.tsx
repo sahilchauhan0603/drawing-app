@@ -1,5 +1,9 @@
+import Navbar from "@/components/navbar";
+
 export default function AboutUs() {
-    return (
+  return (
+    <>
+      <Navbar />
       <div className="bg-gray-50 min-h-screen py-16 px-6 md:px-12 lg:px-24">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6 animate-fadeIn">
@@ -32,6 +36,6 @@ export default function AboutUs() {
           </div>
         </div>
       </div>
-    );
-  }
-  
+    </>
+  );
+}

@@ -4,6 +4,7 @@ import Footer from "../components/footer";
 import FeatureSectionPage from "@/components/featuresSection";
 import { useEffect } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import Navbar from "@/components/navbar";
 
 export default function Page() {
 
@@ -14,6 +15,7 @@ export default function Page() {
 
   return (
     <div>
+      <Navbar/>
       <HomePage/>
       <FeatureSectionPage/>
       <Footer/>

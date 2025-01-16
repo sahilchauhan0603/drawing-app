@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         {/* Pass the `authStatus` to Navbar */}
-        <Navbar isAuthenticated={authStatus} />
+        {/* <Navbar isAuthenticated={authStatus} /> */}
         <main>{children}</main>
       </body>
     </html>
