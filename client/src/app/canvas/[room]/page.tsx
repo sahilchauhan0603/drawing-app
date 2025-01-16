@@ -6,11 +6,15 @@ import ChatIcon from '@/components/Canvas/ChatIcon';
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'; 
 
-export default function Page({ params }: { params: Promise<{ room: string }> }) {
+interface Params {
+  room: string;
+}
+
+export default function Page({ params }: { params: Promise<Params> }) {
   const [name, setName] = useState('');
   const searchParams = useSearchParams(); 
 
-  const [unwrappedParams, setUnwrappedParams] = useState<{ room: string } | null>(null);
+  const [unwrappedParams, setUnwrappedParams] = useState<Params | null>(null);
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -37,7 +41,7 @@ export default function Page({ params }: { params: Promise<{ room: string }> }) 
       <ProfileIcons />
       <Canvas room={room}/>
       <HomeIcon />
-      <ChatIcon name = {name}/>
+      <ChatIcon room={room} name={name} />
     </div>
   );
 }

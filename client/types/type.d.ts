@@ -41,6 +41,11 @@ type DrawShapeProps = {
   ctx :CanvasRenderingContext2D,
   startPoint : Point,
   endPoint : Point,
-  shape : "rectangle" | "circle",
-  color : string
+}
+interface ChatIconProps {
+  name: string; 
+  room : string;
+}
+interface CanvasIconProps {
+  room : string;
 }

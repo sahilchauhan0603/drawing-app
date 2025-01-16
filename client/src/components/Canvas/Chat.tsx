@@ -5,11 +5,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import socket from '@/services/socket';
 
-interface ChatIconProps {
-  name: string;
-}
 
-export default function Chat({ room, name }: { room: string, name: string }) {
+
+export default function Chat({ name , room }: ChatIconProps) {
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
   const [messageText, setMessageText] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);
@@ -26,6 +24,7 @@ export default function Chat({ room, name }: { room: string, name: string }) {
     };
 
     socket.emit('sendMessage', { room, ...newMessage });
+    setMessages((prev) => [...prev, newMessage]);
     setMessageText('');
   };
 

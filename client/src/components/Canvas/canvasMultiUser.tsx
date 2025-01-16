@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation"; 
 import { FiX, FiMenu, } from "react-icons/fi";
 
-export default function Canvas({room} : string) {
+export default function Canvas({room} : ChatIconProps) {
   const [color, setColor] = useState<string>('#FFFFFF');
   const { canvasRef, onMouseDown, clear } = useDraw(createLine);
   // const [room, setRoom] = useState<string>('');
