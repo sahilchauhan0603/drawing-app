@@ -8,12 +8,14 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 export default function Profile() {
   const [friendEmail, setFriendEmail] = useState('');
   const [friends, setFriends] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const { user, isAuthenticated } = useKindeBrowserClient();
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
 
   if (!isAuthenticated) {
     return <p className="text-center text-xl mt-10 font-semibold text-gray-600">Please log in to view your profile.</p>;
@@ -50,7 +52,7 @@ export default function Profile() {
   };
 
   const handleNewRoom = () => {
-      const newRoom = prompt('Enter the name of the new room:');
+      const newRoom = prompt('Enter the name of the room:');
       if (newRoom && newRoom.trim()) {
         toast.success(`Joining new room: ${newRoom}`, { position: 'top-right' });
         router.push(`/canvas/${newRoom.trim()}`);
@@ -119,11 +121,38 @@ export default function Profile() {
         </button>
 
         <button
-          onClick={() => alert('Start Conversation functionality coming soon!')}
-          className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
-        >
-          Start Conversation
-        </button>
+        onClick={() => setShowModal(true)}
+        className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
+      >
+        Start Conversation
+      </button>
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Ready to Chat?</h2>
+            <p className="text-gray-600 mb-6">
+              Want to chat with your friends? Head to the room and start your conversation, with Canvas making it 
+              effortless and fun for you!
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleNewRoom}
+                className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
+              >
+                Head to Room
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       </div>
 
       {/* Invite Friends */}
