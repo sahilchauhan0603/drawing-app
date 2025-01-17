@@ -1,0 +1,8 @@
+{
+    "functions": {
+      "queries": {
+        "getCanvasImages": "server/getCanvasImages"
+      }
+    }
+  }
+  
