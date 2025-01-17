@@ -1,4 +1,6 @@
 import Navbar from "@/components/navbar";
+import FeedbackButton from "@/components/FeedBackButton";
+import Footer from "@/components/footer";
 
 export default function AboutUs() {
   return (
@@ -36,6 +38,8 @@ export default function AboutUs() {
           </div>
         </div>
       </div>
+      <FeedbackButton/>
+      <Footer/>
     </>
   );
 }

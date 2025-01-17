@@ -52,39 +52,37 @@ export default function HomePage() {
         </section>
 
         {/* Input Section */}
-<section className="flex flex-col items-center mt-2 space-y-4 w-2/4 max-w-md mx-auto">
-  <div className="flex items-center w-full relative">
-    {/* Name Input */}
-    <input
-      type="text"
-      placeholder="Enter your name"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      className="p-3 border text-black border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 shadow-sm"
-    />
-
-    {/* Join Room Button */}
-    <button
-      onClick={handleJoinRoom}
-      className="absolute mt-[300px] left-1/2 transform -translate-x-1/2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-200 hover:scale-105 -translate-y-1/2"
-    >
-      Join Room
-    </button>
-  </div>
-
-  {/* Room Input */}
-  <div className="w-full">
-    <input
-      type="text"
-      placeholder="Enter room name"
-      value={room}
-      onChange={(e) => setRoom(e.target.value)}
-      className="p-3 border text-black border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 shadow-sm"
-    />
-  </div>
-</section>
-
-
+        <section className="flex flex-col items-center mt-2 space-y-4 w-2/4 max-w-md mx-auto">
+          <div className="flex items-center w-full relative">
+            {/* Name Input */}
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="p-3 border text-black border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 shadow-sm"
+            />
+        
+            {/* Join Room Button */}
+            <button
+              onClick={handleJoinRoom}
+              className="absolute mt-[300px] left-1/2 transform -translate-x-1/2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-200 hover:scale-105 -translate-y-1/2"
+            >
+              Join Room
+            </button>
+          </div>
+        
+          {/* Room Input */}
+          <div className="w-full">
+            <input
+              type="text"
+              placeholder="Enter room name"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+              className="p-3 border text-black border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 shadow-sm"
+            />
+          </div>
+        </section>
       </div>
     </div>
   );

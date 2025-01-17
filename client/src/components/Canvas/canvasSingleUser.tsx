@@ -143,7 +143,7 @@ export default function Canvas({params} : PostPageProps) {
   }, [color]);
 
   return (
-    <div className="w-100 flex bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
+    <div className="w-100 h-full flex bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
           
           <div
   className={`fixed top-0 left-0 h-5/6 ml-1 rounded-lg overflow-y-auto w-64 z-20 bg-gray-900 text-white p-4 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}

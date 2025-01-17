@@ -5,6 +5,7 @@ import FeatureSectionPage from "@/components/featuresSection";
 import { useEffect } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import Navbar from "@/components/navbar";
+import FeedbackButton from "@/components/FeedBackButton";
 
 export default function Page() {
 
@@ -18,6 +19,7 @@ export default function Page() {
       <Navbar/>
       <HomePage/>
       <FeatureSectionPage/>
+      <FeedbackButton/>
       <Footer/>
     </div>
   );

@@ -27,9 +27,9 @@ export default function Profile() {
     setLoading(true);
 
     try {
-      const SERVICE_ID = 'service_wq70qjl';
-      const TEMPLATE_ID = 'template_9rv31yl';
-      const PUBLIC_KEY = '5WDqrHRPEFPOqnTNb';
+      const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!;
+      const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_INVITE!;
+      const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!;
 
       const templateParams = {
         to_email: friendEmail,
