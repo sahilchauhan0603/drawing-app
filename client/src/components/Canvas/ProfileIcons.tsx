@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
-
-interface AuthenticatedUser {
-  id: string;
-  email: string | null;
-  given_name: string | null;
-  family_name?: string | null;
-  picture?: string | null;
-  [key: string]: any;
-}
+import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
 
 const ProfileIcons = () => {
   const { getUser, isAuthenticated } = useKindeBrowserClient();
-  const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser | null>(null);
+  const [authenticatedUser, setAuthenticatedUser] = useState<KindeUser<Record<string, string>> | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
       const currentUser = getUser();
+        if(!currentUser)return;
       setAuthenticatedUser(currentUser);
     }
   }, [isAuthenticated, getUser]);

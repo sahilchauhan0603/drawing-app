@@ -3,20 +3,22 @@
 import Link from "next/link";
 import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import { FaUserCircle } from "react-icons/fa"; // Profile Icon
+// import { KindeUser } from '@kinde-oss/kinde-auth-nextjs/types';
+
 
 export default function Navbar() {
   // Kinde authentication client
-  const { user, getUser, isAuthenticated } = useKindeBrowserClient();
-  const [authenticatedUser, setAuthenticatedUser] = useState<any>(null);
+  const { user,  isAuthenticated } = useKindeBrowserClient();
+  // const [authenticatedUser, setAuthenticatedUser] = useState<KindeUser<Record<string, string>> | null>(null);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      const currentUser = getUser();
-      setAuthenticatedUser(currentUser); // Set the authenticated user data
-    }
-  }, [isAuthenticated, getUser]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     const currentUser = getUser();
+  //     setAuthenticatedUser(currentUser); // Set the authenticated user data
+  //   }
+  // }, [isAuthenticated, getUser]);
 
   return (
     <header className="bg-gray-800 text-white w-full shadow-lg">
