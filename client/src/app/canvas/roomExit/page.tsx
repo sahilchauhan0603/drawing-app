@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FaRedoAlt, FaHome, FaDoorOpen } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaRedoAlt, FaHome, FaDoorOpen } from "react-icons/fa";
+import { Suspense } from 'react'
+
 
 export default function RoomExitPage() {
   const [timer, setTimer] = useState<number>(30);
@@ -12,13 +14,18 @@ export default function RoomExitPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const roomParam = searchParams.get('room');
+  const handlePrams = () => {
+    const roomParam = searchParams.get("room");
     if (roomParam) {
       setRoom(roomParam);
     } else {
-      console.warn('No room parameter found.');
+      console.warn("No room parameter found.");
     }
+  }
+
+  useEffect(() => {
+    handlePrams();
+    
   }, [searchParams]);
 
   useEffect(() => {
@@ -30,32 +37,34 @@ export default function RoomExitPage() {
 
   const handleRejoin = () => {
     if (room) {
-      toast.success(`Rejoining room: ${room}`, { position: 'top-right' });
+      toast.success(`Rejoining room: ${room}, { position: "top-right" }`);
       router.push(`/canvas/${room}`);
     } else {
-      toast.error('Room is undefined. Cannot rejoin.');
+      toast.error("Room is undefined. Cannot rejoin.");
     }
   };
 
   const handleNewRoom = () => {
-    const newRoom = prompt('Enter the name of the new room:');
+    const newRoom = prompt("Enter the name of the new room:");
     if (newRoom && newRoom.trim()) {
-      toast.success(`Joining new room: ${newRoom}`, { position: 'top-right' });
+      toast.success(`Joining new room: ${newRoom}, { position: "top-right" }`);
       router.push(`/canvas/${newRoom.trim()}`);
     } else {
-      toast.error('Invalid room name. Please try again.');
+      toast.error("Invalid room name. Please try again.");
     }
   };
 
   const handleGoHome = () => {
-    router.push('/');
+    router.push("/");
   };
 
   return (
+        <Suspense>
+
     <div
       className="flex flex-col items-center justify-center h-screen text-white p-6 relative bg-cover bg-center"
       style={{
-        backgroundImage: 'url(/bg.jpg)', // Replace with your image path
+        backgroundImage: "url(/bg.jpg)", // Replace with your image path
       }}
     >
       {/* Overlay */}
@@ -67,7 +76,7 @@ export default function RoomExitPage() {
           You&apos;ve Left the Room
         </h1>
         <p className="text-lg font-medium">
-          You can rejoin the room within{' '}
+          You can rejoin the room within{" "}
           <span className="font-bold text-yellow-400">{timer}s</span> or choose
           another action.
         </p>
@@ -80,8 +89,8 @@ export default function RoomExitPage() {
             disabled={timer === 0}
             className={`flex items-center justify-center px-6 py-3 rounded-lg shadow-xl text-lg font-semibold transition-transform transform duration-200 ${
               timer > 0
-                ? 'bg-green-500 hover:bg-green-600 hover:scale-105'
-                : 'bg-gray-500 cursor-not-allowed'
+                ? "bg-green-500 hover:bg-green-600 hover:scale-105"
+                : "bg-gray-500 cursor-not-allowed"
             }`}
           >
             <FaRedoAlt className="mr-2" />
@@ -105,12 +114,13 @@ export default function RoomExitPage() {
             <FaHome className="mr-2" />
             Go to Home
           </button>
-          
         </div>
       </div>
 
       {/* Toast Notifications */}
       <ToastContainer />
     </div>
+        </Suspense>
+
   );
 }
