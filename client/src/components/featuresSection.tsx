@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
-// import Image from "next/image";
-
 
 export default function FeatureSectionPage() {
 
@@ -195,7 +193,6 @@ export default function FeatureSectionPage() {
             transition={{ duration: 1, delay: 0.3 }}
           >
             Dive into our powerful drawing canvas to unleash your imagination. Whether you&apos;re a beginner or a professional, the canvas is tailored for your creative needs. Explore endless possibilities and bring your ideas to life!
-
           </motion.p>
       
           {/* Button */}

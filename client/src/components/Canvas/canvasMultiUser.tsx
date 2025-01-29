@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateRight, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import { faFileUpload, faCloudDownloadAlt, faPencilAlt, faTimes, faSquare, faCircle, faSave, faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-// import { useMutation, useQuery } from "convex/react";
+// import { useMutation } from "convex/react";
 // import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 // import { api } from "../../../convex/_generated/api";
 // import { getCanvasImages } from '../../../convex/getCanvasImages'
@@ -25,12 +25,12 @@ export default function Canvas({room} : ChatIconProps) {
   const [selectedShape, setSelectedShape] = useState<"freehand" | "rectangle" | "circle" | "line">("freehand");
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar state
-  // const [savedImage, setSavedImage] = useState<string | null>(null);
+  // const [setSavedImage] = useState<string | null>(null);
   const router = useRouter(); 
 
   // const { user } = useKindeBrowserClient();
 
-  // const canvasRef = useRef(null);
+  // // const canvasRef = useRef(null);
   // const saveCanvas = useMutation("saveCanvas");
   // const handleSaveCanvas = async () => {
   // if (!canvasRef.current) return;
@@ -56,7 +56,7 @@ export default function Canvas({room} : ChatIconProps) {
   //   }
   // };
 
-  // // const getImages = useQuery(api.getCanvasImages.getCanvasImages); //use this
+  // const getImages = useQuery(api.getCanvasImages.getCanvasImages); //use this
   // // const { data: images, error, isLoading } = useQuery("api.getCanvasImages.getCanvasImages", {
   // //   userIdentifier: user?.email ?? "", // Pass a fallback or handle null user
   // // });
@@ -86,36 +86,36 @@ export default function Canvas({room} : ChatIconProps) {
   //   }
   // };
   
-  // const handleShareCanvas = () => {
-  //   if (!canvasRef.current) return;
+  const handleShareCanvas = () => {
+    if (!canvasRef.current) return;
 
-  //   const canvas = canvasRef.current;
-  //   const imageData = canvas.toDataURL("image/png");
+    const canvas = canvasRef.current;
+    const imageData = canvas.toDataURL("image/png");
 
-  //   if (navigator.share) {
-  //     // Use Web Share API for sharing (supported in most modern browsers)
-  //     navigator
-  //       .share({
-  //         title: "Check out my drawing!",
-  //         text: "Here's my latest canvas art. What do you think?",
-  //         files: [
-  //           new File([imageData], "drawing.png", { type: "image/png" }),
-  //         ],
-  //       })
-  //       .then(() => toast.success("Shared successfully!"))
-  //       .catch((error) => {
-  //         console.error("Failed to share canvas:", error);
-  //         toast.error("Failed to share. Please try again.");
-  //       });
-  //   } else {
-  //     // Fallback: allow the user to download the image
-  //     const link = document.createElement("a");
-  //     link.href = imageData;
-  //     link.download = "my_drawing.png";
-  //     link.click();
-  //     toast.info("Image downloaded. Share it manually!");
-  //   }
-  // };
+    if (navigator.share) {
+      // Use Web Share API for sharing (supported in most modern browsers)
+      navigator
+        .share({
+          title: "Check out my drawing!",
+          text: "Here's my latest canvas art. What do you think?",
+          files: [
+            new File([imageData], "drawing.png", { type: "image/png" }),
+          ],
+        })
+        .then(() => toast.success("Shared successfully!"))
+        .catch((error) => {
+          console.error("Failed to share canvas:", error);
+          toast.error("Failed to share. Please try again.");
+        });
+    } else {
+      // Fallback: allow the user to download the image
+      const link = document.createElement("a");
+      link.href = imageData;
+      link.download = "my_drawing.png";
+      link.click();
+      toast.info("Image downloaded. Share it manually!");
+    }
+  };
 
   const { canvasRef: shapeCanvasRef} = useShape(({ ctx, startPoint, endPoint }) => {
     if (selectedShape === "rectangle") {
@@ -299,9 +299,7 @@ export default function Canvas({room} : ChatIconProps) {
                 <FontAwesomeIcon icon={faCloudDownloadAlt} />
                 <span>Export</span>
               </button>
-              <button 
-              // onClick={handleSaveCanvas} 
-              className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700">
+              <button className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700">
                 <FontAwesomeIcon icon={faSave} />
                 <span>Save</span>
               </button>
@@ -317,7 +315,7 @@ export default function Canvas({room} : ChatIconProps) {
 
               {/* Fetch Saved Image Button */}
               <button
-                // onClick={handleShareCanvas}
+                onClick={handleShareCanvas}
                 className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700"
               >
                 <FontAwesomeIcon icon={faShareAlt} />

@@ -4,10 +4,11 @@ import { useShape } from "@/hooks/useShape";
 import { ChromePicker } from "react-color";
 import { useEffect, useState } from "react";
 import { drawLine, drawCircle, drawRectangle } from "@/utils/drawShapes";
-import {  ToastContainer } from "react-toastify";
+import socket from "@/services/socket";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { useRouter } from "next/navigation"; 
-import {  FiMenu, } from "react-icons/fi";
+import { FiMenu, } from "react-icons/fi";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { faFileUpload, faCloudDownloadAlt, faPencilAlt, faTimes, faSquare, faCircle, faSave, faShareAlt } from '@fortawesome/free-solid-svg-icons';
@@ -17,13 +18,15 @@ import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/
 // import { api } from "../../../convex/_generated/api";
 // import { getCanvasImages } from '../../../convex/getCanvasImages'
 
-export default function Canvas() {
+export default function Canvas({params} : PostPageProps) {
   const [color, setColor] = useState<string>('#FFFFFF');
   const { canvasRef, onMouseDown, clear } = useDraw(createLine);
+  const [room, setRoom] = useState<string>('');
   const [selectedShape, setSelectedShape] = useState<"freehand" | "rectangle" | "circle" | "line">("freehand");
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar state
   // const [savedImage, setSavedImage] = useState<string | null>(null);
+  const [savedImage] = useState<string | null>(null);
   // const router = useRouter(); 
 
   // const { user } = useKindeBrowserClient();
@@ -54,7 +57,7 @@ export default function Canvas() {
 //   }
 // };
 
-//   const getImages = useQuery(api.getCanvasImages.getCanvasImages); //use this
+//   const getCanvasImages = useQuery(api.getCanvasImages.getCanvasImages); //use this
 //   // const { data: images, error, isLoading } = useQuery("api.getCanvasImages.getCanvasImages", {
 //   //   userIdentifier: user?.email ?? "", // Pass a fallback or handle null user
 //   // });
@@ -85,62 +88,139 @@ export default function Canvas() {
 //     }
 //   };
 
-//   const handleShareCanvas = () => {
-//     if (!canvasRef.current) return;
+  const handleShareCanvas = () => {
+    if (!canvasRef.current) return;
 
-//     const canvas = canvasRef.current;
-//     const imageData = canvas.toDataURL("image/png");
+    const canvas = canvasRef.current;
+    const imageData = canvas.toDataURL("image/png");
 
-//     if (navigator.share) {
-//       // Use Web Share API for sharing (supported in most modern browsers)
-//       navigator
-//         .share({
-//           title: "Check out my drawing!",
-//           text: "Here's my latest canvas art. What do you think?",
-//           files: [
-//             new File([imageData], "drawing.png", { type: "image/png" }),
-//           ],
-//         })
-//         .then(() => toast.success("Shared successfully!"))
-//         .catch((error) => {
-//           console.error("Failed to share canvas:", error);
-//           toast.error("Failed to share. Please try again.");
-//         });
-//     } else {
-//       // Fallback: allow the user to download the image
-//       const link = document.createElement("a");
-//       link.href = imageData;
-//       link.download = "my_drawing.png";
-//       link.click();
-//       toast.info("Image downloaded. Share it manually!");
-//     }
-//   };
+    if (navigator.share) {
+      // Use Web Share API for sharing (supported in most modern browsers)
+      navigator
+        .share({
+          title: "Check out my drawing!",
+          text: "Here's my latest canvas art. What do you think?",
+          files: [
+            new File([imageData], "drawing.png", { type: "image/png" }),
+          ],
+        })
+        .then(() => toast.success("Shared successfully!"))
+        .catch((error) => {
+          console.error("Failed to share canvas:", error);
+          toast.error("Failed to share. Please try again.");
+        });
+    } else {
+      // Fallback: allow the user to download the image
+      const link = document.createElement("a");
+      link.href = imageData;
+      link.download = "my_drawing.png";
+      link.click();
+      toast.info("Image downloaded. Share it manually!");
+    }
+  };
 
   const { canvasRef: shapeCanvasRef} = useShape(({ ctx, startPoint, endPoint }) => {
     if (selectedShape === "rectangle") {
       drawRectangle({ ctx, startPoint, endPoint, color });
+      socket.emit('draw-rectangle', { startPoint, endPoint, color, room });
+      console.log(room)
       console.log("send to server")
     } else if (selectedShape === "circle") {
       drawCircle({ ctx, centerPoint: startPoint, endPoint, color });
+      socket.emit('draw circle', { startPoint, endPoint, color, room });
     }
   });
 
- 
-  
-  
+  useEffect(() => {
+
+    const resolveParams = async () => {
+      const resolvedParams = await (params instanceof Promise ? params : Promise.resolve(params));
+      console.log("Resolved Params:", resolvedParams);
+      const currRoom = resolvedParams?.room;
+      if (currRoom) {
+        setRoom(currRoom);
+        console.log("Current Room:", currRoom);
+      } else {
+        console.warn("No room found in resolved params.");
+      }
+    };
+
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (room.trim()) {
+      handleJoinRoom(); 
+    }
+  }, [room]);  
+
+  function handleJoinRoom() {
+    if (room.trim()) {
+      socket.emit('join-room', room);
+      console.log(`Request to join room ${room}`);
+      socket.emit('client-ready', room);
+
+      toast.success(`successfully joined room - ${room}`, {
+        position: "top-right",
+      });
+    }
+  }
+
   function handleClear() {
     clear()
   }
 
-  // useEffect(() => {
-  //   const ctx = canvasRef.current?.getContext('2d');
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext('2d');
 
-   
-  // }, [canvasRef , selectedShape , shapeCanvasRef]);
+    socket.on('get-canvas-state', () => {
+      if (!canvasRef.current?.toDataURL()) return;
+      socket.emit('canvas-state', { room, state: canvasRef.current?.toDataURL() });
+    });
+
+    socket.on('canvas-state-from-server', (state) => {
+      const img = new Image();
+      img.src = state;
+      img.onload = () => {
+        ctx?.drawImage(img, 0, 0);
+      };
+    });
+
+    socket.on('draw line', ({ currentPoint, prevPoint, color }: DrawLineProp) => {
+      if (!ctx) return console.log("Context does not exist");
+      drawLine({ ctx, currentPoint, prevPoint, color });
+
+    });
+
+    socket.on('draw circle', ({ startPoint, endPoint, color }: { startPoint: Point, endPoint: Point, color: string }) => {
+      if (!ctx) return console.log("Context does not exist");
+      drawCircle({ ctx, centerPoint: startPoint, endPoint, color });
+    });
+
+    socket.on('draw-rectangle', ({ startPoint, endPoint, color }: { startPoint: Point, endPoint: Point, color: string }) => {
+      if (!ctx) return console.log("Context does not exist");
+      console.log("recienved from server")
+      drawRectangle({ ctx, startPoint, endPoint, color });
+    });
+
+    socket.on('clear-all-from-server', () => {
+      clear();
+      console.log('Canvas cleared from server');
+    });
+
+    return () => {
+      socket.off('draw line');
+      socket.off('clear-all-from-server');
+      socket.off('get-canvas-state');
+      socket.off('canvas-state-from-server');
+      socket.off('draw-rectangle');
+    };
+  }, [canvasRef, room , params , selectedShape , shapeCanvasRef]);
 
   function createLine({ ctx, currentPoint, prevPoint }: Draw) {
     if(selectedShape == 'freehand'){
       drawLine({ ctx, currentPoint, prevPoint, color });
+      socket.emit('draw line', { currentPoint, prevPoint, color, room });
     }
     
   }
@@ -248,7 +328,7 @@ export default function Canvas() {
 
         {/* Fetch Saved Image Button */}
         <button
-          // onClick={handleShareCanvas}
+          onClick={handleShareCanvas}
           className="flex items-center space-x-2 text-gray-400 hover:text-white w-full rounded-lg hover:bg-gray-700"
         >
           <FontAwesomeIcon icon={faShareAlt} />
@@ -293,13 +373,13 @@ export default function Canvas() {
   </div>
 </div>
 
-      {/* Display the fetched image
+      {/* Display the fetched image */}
       {savedImage && (
         <div className="mt-4">
           <h3>Fetched Canvas Image:</h3>
-          <Image src={savedImage} alt="Fetched Canvas" className="w-full" />
+          <img src={savedImage} alt="Fetched Canvas" className="w-full" />
         </div>
-      )} */}
+      )}
 
       {/* Sidebar Toggle */}
       {!isSidebarOpen && (

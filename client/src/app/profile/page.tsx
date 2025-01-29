@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import emailjs from 'emailjs-com';
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from 'next/navigation';
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Profile() {
   const [friendEmail, setFriendEmail] = useState('');
@@ -17,12 +17,14 @@ export default function Profile() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
+
   if (!isAuthenticated) {
     return <p className="text-center text-xl mt-10 font-semibold text-gray-600">Please log in to view your profile.</p>;
   }
-
+  
   if (!user) {
-    return <p className="text-center text-xl mt-10 font-semibold text-gray-600">User information not available.</p>;
+    console.error('User is not defined!');
+    return; // Exit the function or handle the error
   }
 
   const handleSendInvite = async () => {
@@ -56,13 +58,13 @@ export default function Profile() {
   };
 
   const handleNewRoom = () => {
-    const newRoom = prompt('Enter the name of the room:');
-    if (newRoom && newRoom.trim()) {
-      toast.success(`Joining new room: ${newRoom}`, { position: 'top-right' });
-      router.push(`/canvas/${newRoom.trim()}`);
-    } else {
-      toast.error('Invalid room name. Please try again.');
-    }
+      const newRoom = prompt('Enter the name of the room:');
+      if (newRoom && newRoom.trim()) {
+        toast.success(`Joining new room: ${newRoom}`, { position: 'top-right' });
+        router.push(`/canvas/${newRoom.trim()}`);
+      } else {
+        toast.error('Invalid room name. Please try again.');
+      }
   };
 
   return (
@@ -74,13 +76,10 @@ export default function Profile() {
       {/* Profile Section */}
       <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-start space-y-6 lg:space-y-0 lg:space-x-8">
         <div className="lg:w-1/3 flex justify-center lg:justify-end -mt-10">
-          <Image
+          <img
             src={user.picture || "/default-avatar.jpg"}
             alt="Profile"
-            width={160} // Set specific width
-            height={160} // Set specific height
-            className="rounded-full border-4 border-gray-300 shadow-md"
-            priority // Optional: preload the image
+            className="w-32 h-32 lg:w-40 lg:h-40 object-cover rounded-full border-4 border-gray-300 shadow-md"
           />
         </div>
         <div className="lg:w-2/3 flex flex-col space-y-4">
@@ -91,8 +90,22 @@ export default function Profile() {
         </div>
       </div>
 
+      {/* Recent Activities
+      <div className="mt-12">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Recent Activities</h3>
+        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+          <h4 className="text-lg text-gray-700">Drawing Activities</h4>
+          <ul className="list-disc pl-5 text-gray-600">
+            <li>Started a new drawing project</li>
+            <li>Completed 3 new drawings</li>
+            <li>Shared a drawing on social media</li>
+          </ul>
+        </div>
+      </div> */}
+
       {/* Action Buttons */}
       <div className="flex flex-wrap justify-center space-x-4 mt-6">
+        
         <button
           onClick={() => router.push('/')}
           className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
@@ -114,38 +127,38 @@ export default function Profile() {
         </button>
 
         <button
-          onClick={() => setShowModal(true)}
-          className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
-        >
-          Start Conversation
-        </button>
-
-        {/* Modal */}
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-800">Ready to Chat?</h2>
-              <p className="text-gray-600 mb-6">
-                Want to chat with your friends? Head to the room and start your conversation, with Canvas making it
-                effortless and fun for you!
-              </p>
-              <div className="flex justify-end space-x-4">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleNewRoom}
-                  className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
-                >
-                  Head to Room
-                </button>
-              </div>
+        onClick={() => setShowModal(true)}
+        className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
+      >
+        Start Conversation
+      </button>
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Ready to Chat?</h2>
+            <p className="text-gray-600 mb-6">
+              Want to chat with your friends? Head to the room and start your conversation, with Canvas making it 
+              effortless and fun for you!
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleNewRoom}
+                className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
+              >
+                Head to Room
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
+
       </div>
 
       {/* Invite Friends */}

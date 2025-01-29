@@ -4,29 +4,22 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Suspense } from "react";
 import { FaRedoAlt, FaHome, FaDoorOpen } from "react-icons/fa";
-import { Suspense } from 'react'
 
-
-export default function RoomExitPage() {
+function RoomExitContent() {
   const [timer, setTimer] = useState<number>(30);
-  const [room, setRoom] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handlePrams = () => {
-    const roomParam = searchParams.get("room");
-    if (roomParam) {
-      setRoom(roomParam);
-    } else {
-      console.warn("No room parameter found.");
-    }
-  }
+  // Extract the room parameter
+  const room = searchParams?.get("room");
 
   useEffect(() => {
-    handlePrams();
-    
-  }, [searchParams]);
+    if (!room) {
+      console.warn("No room parameter found.");
+    }
+  }, [room]);
 
   useEffect(() => {
     if (timer > 0) {
@@ -37,7 +30,7 @@ export default function RoomExitPage() {
 
   const handleRejoin = () => {
     if (room) {
-      toast.success(`Rejoining room: ${room}, { position: "top-right" }`);
+      toast.success(`Rejoining room: ${room}`, { position: "top-right" });
       router.push(`/canvas/${room}`);
     } else {
       toast.error("Room is undefined. Cannot rejoin.");
@@ -47,7 +40,7 @@ export default function RoomExitPage() {
   const handleNewRoom = () => {
     const newRoom = prompt("Enter the name of the new room:");
     if (newRoom && newRoom.trim()) {
-      toast.success(`Joining new room: ${newRoom}, { position: "top-right" }`);
+      toast.success(`Joining new room: ${newRoom}`, { position: "top-right" });
       router.push(`/canvas/${newRoom.trim()}`);
     } else {
       toast.error("Invalid room name. Please try again.");
@@ -59,8 +52,6 @@ export default function RoomExitPage() {
   };
 
   return (
-        <Suspense>
-
     <div
       className="flex flex-col items-center justify-center h-screen text-white p-6 relative bg-cover bg-center"
       style={{
@@ -120,7 +111,13 @@ export default function RoomExitPage() {
       {/* Toast Notifications */}
       <ToastContainer />
     </div>
-        </Suspense>
+  );
+}
 
+export default function RoomExitPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RoomExitContent />
+    </Suspense>
   );
 }

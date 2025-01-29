@@ -2,7 +2,6 @@ import { createServer } from 'node:http';
 import { parse } from 'node:url';
 import next from 'next';
 import { Server } from 'socket.io';
-const PORT = process.env.PORT || 3000;
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -16,7 +15,7 @@ app.prepare().then(() => {
 
   const io = new Server(server, {
     cors: {
-      origin: `http://localhost:${PORT}`, // Ensure this is correct
+      origin: ['http://localhost:3000', 'https://drawing-app-git-main-sahil-chauhans-projects-cf9884c2.vercel.app', 'https://drawing-app-lilac.vercel.app', 'https://drawing-3oyht2t9z-sahil-chauhans-projects-cf9884c2.vercel.app'], // Ensure this is correct
       methods: ['GET', 'POST'],
     },
   });
