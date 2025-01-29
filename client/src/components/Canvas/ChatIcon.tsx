@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react';
 import Chat from './Chat'; // Ensure the Chat component is in the same directory
 import { FaComments } from 'react-icons/fa'; // Ensure react-icons is installed
