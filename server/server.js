@@ -28,6 +28,25 @@ io.on('connection', (socket) => {
     console.log(`User with (ID: ${socket.id}) joined room: ${room}`); // Log the user and their room
   });
 
+  //send msg
+  socket.on('sendMessage', ({ room, sender, text }) => {
+    console.log(`Message received in room ${room}: ${text}`);
+
+    // Broadcast the message to others in the room
+    const message = { sender, text };
+    socket.to(room).emit('receiveMessage',message );
+  });
+
+  // Draw circle
+  socket.on('draw circle', ({ startPoint, endPoint, color, room }) => {
+    socket.to(room).emit('draw circle', { startPoint, endPoint, color });
+  });
+
+    // Draw rectangle
+  socket.on('draw-rectangle', ({ startPoint, endPoint, color, room }) => {
+    socket.to(room).emit('draw-rectangle', { startPoint, endPoint, color });
+  });
+
 
   // Handle drawing lines
   socket.on('draw line', ({ currentPoint, prevPoint, color, room }) => {
